@@ -1,0 +1,192 @@
+\documentclass{article}
+\input{simpdefinitions}
+\usepackage{pgfplots}
+
+\addtolength{\oddsidemargin}{-.6\oddsidemargin}
+\addtolength{\evensidemargin}{-.6\evensidemargin}
+\setlength{\topmargin}{0mm}
+\addtolength{\textwidth}{+.2\textwidth}
+\addtolength{\textheight}{+.1\textheight}
+
+
+\begin{document}
+\title{Template}
+\maketitle
+
+In this video I will present 4 examples on deriving the posterior distribution given the prior and the observed outcome. Keep in mind that the main idea in Bayesian modelling is the notion of updating what we know about the distribution of the model parameters after the data becomes available. In other words, we want to study the distribution of the parameters conditional on the observed data.
+
+
+
+\section*{Example 1}
+Suppose that we have n observations x one up to x n and we model them as draws from an exponential distribution with rate parameter $\lambda$. The only complication is that we want to model the situation in a way that allows for the scale parameter $\lambda$ itself to be random. For this example, that us suppose that our pior belief is $\lambda$ being a random variable from a gamma distribution with shape parameter 7 and rate parameter 5.
+
+\[
+\begin{split}
+X_i|\lambda&\overset{iid}{\sim}\mathsf{Exp}(\lambda)\quad\mbox{for }i=1,\ldots,n\\
+\lambda&\sim\mathsf{Gamma}(5,7)
+\end{split}
+\]
+
+The first step is to work out the likelihood. Since we are assuming that each of the iid observations comes from an exponential distribution whenever $\lambda$ is given, the likelihood denoted by $L$ is given by this product. 
+\[
+L(\v x|\lambda)=\prod_{i=1}^nf(x_i|\beta)=\lambda^n\exp\left(-\lambda\sum_{i=1}^nx_i\right)
+\]
+
+Next the density of the prior distribution looks like this
+\[
+p(\lambda)=\frac{5^7}{\Gamma(7)}\lambda^{7-1}\exp\left(-5\lambda\right)
+\]
+
+The last step is to work out what the posterior distribution of the parameter which is
+\[
+\mbox{density}(\mbox{parameter}|\mbox{data}).
+\]
+This formalizes the idea of how your knowledge of the model parameter have changed or reinforced after seeing the observed data.
+
+In this example it is the density of $\lambda$ given the vector of observations $\v x$. I usually like to call my posterior $\pi$.
+\[
+\mbox{density}(\mbox{parameter}|\mbox{data})=\pi(\lambda|\v x)
+\]
+
+To work that out we need to apply the Bayes theorem, which is
+\[
+\pi(\lambda|\v x)=\frac{L(\v x|\lambda)p(\lambda)}{\int L(\v x|\lambda)p(\lambda)\,d\lambda}
+\]
+The integral on the bottom is normalizing constant which ensures the whole expression integrates to 1. For the purpose of today, we are not interested in this integral, so it turns out that is actually enough to say that posterior density is proportional to the numerator expression.
+\[
+\pi(\lambda|\v x)=\frac{L(\v x|\lambda)p(\lambda)}{\int L(\v x|\lambda)p(\lambda)\,d\lambda}\varpropto L(\v x|\lambda)p(\lambda)
+\]
+So plugging what we have we get the following. A trick that I used here is to ignore any multiplicative constants unrelated to the parameter $\lambda$. This is ok because we studying the posterior up to some proportionality constant. Finally notice that we end up with an expression that is equal to a gamma distribution. Sometimes we are lucky that the posterior density is some well-studied one. Sometimes we are not so lucky, then we need to put in some more effort. 
+
+That aside, knowing what the posterior density is, we can use it to form predictions. One simple way to do so is to simulate a lot of $\lambda$ from this distribution, then for each $\lambda$ we simulate a corresponding $x$, from there we can make some predictions about $x$ for example by calculating the average.
+\[
+\begin{split}
+\pi(\lambda|\v x)&\varpropto L(\v x|\lambda)p(\lambda)\\
+&=\lambda^n\exp\left(-\lambda\sum_{i=1}^nx_i\right)\times\frac{5^7}{\Gamma(7)}\lambda^{7-1}\exp\left(-5\lambda\right)\\
+&\varpropto\lambda^{7+n-1}\exp\left(-\left[5+\sum_{i=1}^nx_i\right]\beta\right)\\
+\lambda|\v x&\sim\mathsf{Gamma}(7+n,5+\sum_{i=1}^nx_i)
+\end{split}
+\]
+In other words, a simple way to make predictions on $x$ is
+\begin{itemize}
+	\item for k in $\{1,2,\ldots,m\}$:
+	\item simulate $\lambda_k\sim\mathsf{Gamma}(7+n,5+\sum_{i=1}^nx_i)$
+	\item simulate $x_k\sim\mathsf{Exp}(\lambda_k)$
+	\item calculate average of $x_1,\ldots,x_m$
+\end{itemize}
+
+
+
+
+So in summary, once you have decided on your model, there are three steps to follow
+\begin{enumerate}
+	\item write down the likelihood conditional on the parameter
+	\item write down the prior
+	\item work out the posterior using the Bayes' theorem
+\end{enumerate}
+
+\section*{Example 2}
+Let us try example. Suppose $x_1$ up to $x_n$ are iid normal with mean $\mu$ and a known variance of $1/2$. Further the prior belief for the mean is exponential with rate $2$. Find the posterior density for $\mu$
+
+We have
+\[
+\begin{split}
+x_i&\overset{iid}{\sim}\mathsf{N}(\mu,1/2)\\
+\mu&\sim\mathsf{Exp}(2)
+\end{split}
+\]
+so that
+\[
+\begin{split}
+L(\v x|\mu)&=\prod_{i=1}^nf(x_i|\mu)=\prod_{i=1}^n\frac{1}{\sqrt{\pi}}\exp[-(x_i-\mu)^2]\\
+&=\pi^{-n/2}\exp\left(-\sum_{i=1}^n(x_i-\mu)^2\right)\\
+&=\pi^{-n/2}\exp\left(-n\mu^2+2\mu\sum_{i=1}^nx_i+\sum_{i=1}^nx_i^2\right)\\
+&=\pi^{-n/2}\exp\left(-n\mu^2+2n\bar{x}\mu +\sum_{i=1}^nx_i^2\right)\\
+\because p(\mu)&=2\exp(-2\mu)\bb I\{\mu>0\}\\
+\therefore \pi(\mu|\v x)&\varpropto (2\pi)^{-n/2}\exp\left(-n\mu^2+2n\bar{x}\mu +\sum_{i=1}^nx_i^2\right)2\exp(-2\mu)\bb I\{\mu>0\}\\
+ &\varpropto\exp\left(-n\mu^2+2n(\bar{x}-1/n)\mu\right)\bb I\{\mu>0\}\\
+  &=\exp\left(-n\mu^2+2n(\bar{x}-1/n)\mu-n(\bar{x}-1)^2+n(\bar{x}-1)^2\right)\bb I\{\mu>0\}\\
+  &\varpropto\exp(-n[\mu-(\bar x-1/n)]^2)\bb I\{\mu>0\}\\
+  \therefore \mu|\v x &\sim\mathsf{N}(\bar x-1/n,1/(2n))\bb I\{\mu>0\}.
+\end{split}
+\]
+So it is a normal with mean $\bar x-1$, variance $1/2n$ constrained to $\mu>0$.
+
+\section*{Example 3}
+In the last two examples, we will look at some regression type model.
+
+Let us suppose that the pairs $(x_1,y_1)$ up to $(x_n,y_n)$ are observed and that given $\beta_0,\beta_1$ and $\sigma^2$ we have. One thing to note is that since we are working with regression type model, everything will turn out to be conditional on $x_i$.
+\[
+\begin{split}
+y_i|\beta_0,\beta_1,\sigma^2,x_i&\overset{iid}{\sim}\mathsf{N}(\beta_0+\beta_1x_i,\sigma^2)\qquad\mbox{for }i=1,\ldots,n\\
+\beta_j|\sigma^2&\overset{iid}{\sim}\mathsf{N}(0,\sigma^2)\qquad\mbox{for }j=0,1\\
+\sigma^2&\sim\mathsf{InvGamma}(5,7)
+\end{split}
+\]
+One thing to note is that since we are working with regression type model, everything will turn out to be conditional on $x_i$.
+
+
+Following the three steps
+\[
+\begin{split}
+L(\v y|\beta_0,\beta_1,\sigma^2,\v x)&=\prod_{i=1}^n\frac{1}{\sqrt{2\pi\sigma^2}}\exp\left(-\frac{(y_i-\beta_0-\beta_1x_i)^2}{2\sigma^2}\right)\\
+&=\prod_{i=1}^n\frac{1}{\sqrt{2\pi\sigma^2}}\exp\left(-\frac{(y_i-\beta_0-\beta_1x_i)^2}{2\sigma^2}\right)\\
+&=(2\pi\sigma^2)^{n/2}\exp\left(-\frac{\sum_{i=1}^n(y_i-\beta_0-\beta_1x_i)^2}{2\sigma^2}\right)\\
+\because p(\beta_0,\beta_1|\sigma^2)&=\frac{1}{\sqrt{2\pi\sigma^2}}\exp\left(-\frac{\beta_0^2}{2\sigma^2}\right)\times\frac{1}{\sqrt{2\pi\sigma^2}}\exp\left(-\frac{\beta_1^2}{2\sigma^2}\right)\\
+&=(2\pi\sigma^2)^{-1}\exp\left(-\frac{\beta_0^2+\beta_1^2}{2\sigma^2}\right)\\
+p(\sigma^2)&=\frac{7^5}{\Gamma(5)}(\sigma^2)^{-5-1}\exp\left(-\frac{7}{\sigma^2}\right)\\
+\therefore \pi(\beta_0,\beta_1,\sigma^2|\v y,\v x)&\varpropto(2\pi\sigma^2)^{n/2}\exp\left(-\frac{\sum_{i=1}^n(y_i-\beta_0-\beta_1x_i)^2}{2\sigma^2}\right)\\
+&\,\times(2\pi\sigma^2)^{-1}\exp\left(-\frac{\beta_0^2+\beta_1^2}{2\sigma^2}\right)\\
+&\,\times\frac{7^5}{\Gamma(5)}(\sigma^2)^{-5-1}\exp\left(-\frac{7}{\sigma^2}\right)
+\end{split}
+\]
+We can see already that this joint distribution is a beast. Fortunately there are techniques like Markov chain Monte Carlo which allows us to approximate simulate draws from this kind of beast. So with a bit of coding, we can still perform inference from it.
+
+\section*{Example 4}
+Our last example takes the following form.
+\[
+\begin{split}
+y_i|\beta_0,\beta_1,\sigma,x_i&\overset{iid}{\sim}\mathsf{N}(\beta_0+\beta_1x_i,\sigma^2)\qquad\mbox{for }i=1,\ldots,n\\
+\beta_j|&\overset{iid}{\sim}\mathsf{N}(0,20^2)\qquad\mbox{for }j=0,1\\
+\sigma&\sim\mathsf{HalfCauchy}(0,10)
+\end{split}
+\]
+so that
+\[
+\begin{split}
+p(\beta_0,\beta_1)&=\frac{1}{\sqrt{2\pi \times 20^2}}\exp\left(-\frac{\beta_0^2}{2\times 20^2}\right)\times \frac{1}{\sqrt{2\pi \times 20^2}}\exp\left(-\frac{\beta_1^2}{2\times 20^2}\right)\\
+p(\sigma)&=\frac{2}{\pi\times 10}\times\frac{1}{1+\sigma^2/10^2}
+\end{split}
+\]
+Notice that unlike the previous example where we specify a prior for $\sigma^2$, this time we specify a prior to $\sigma$.
+
+Following the three steps
+\[
+\begin{split}
+L(\v y|\beta_0,\beta_1,\sigma^2,\v x)&=(2\pi\sigma^2)^{n/2}\exp\left(-\frac{\sum_{i=1}^n(y_i-\beta_0-\beta_1x_i)^2}{2\sigma^2}\right)\\
+p(\beta_0,\beta_1)&=\frac{1}{\sqrt{2\pi \times 20^2}}\exp\left(-\frac{\beta_0^2}{2\times 20^2}\right)\times \frac{1}{\sqrt{2\pi \times 20^2}}\exp\left(-\frac{\beta_1^2}{2\times 20^2}\right)\\
+p(\sigma)&=\frac{2}{\pi\times 10}\times\frac{1}{1+\sigma^2/10^2}\\
+\therefore\pi(\beta_0,\beta_1,\sigma|\v y,\v x)&=(2\pi\sigma^2)^{n/2}\exp\left(-\frac{\sum_{i=1}^n(y_i-\beta_0-\beta_1x_i)^2}{2\sigma^2}\right)\\
+&\,\times\frac{1}{\sqrt{2\pi \times 20^2}}\exp\left(-\frac{\beta_0^2}{2\times 20^2}\right)\times \frac{1}{\sqrt{2\pi \times 20^2}}\exp\left(-\frac{\beta_1^2}{2\times 20^2}\right)\\
+&\,\times\frac{2}{\pi\times 10}\times\frac{1}{1+\sigma^2/10^2}
+\end{split}
+\]
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

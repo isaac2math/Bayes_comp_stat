@@ -1,0 +1,206 @@
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{euscript}
+\usepackage{amsthm}
+\usepackage{mathrsfs}
+\usepackage{enumitem}
+\usepackage{algorithm}
+\usepackage[noend]{algorithmic}
+\usepackage[usenames]{xcolor}
+\usepackage{mdframed}
+\usepackage{tcolorbox}
+\usepackage{multicol}
+\usepackage{dsfont}
+\usepackage{adjustbox}
+%\usepackage{undertilde}
+
+%%%%%%%%%%%  Environment styles  %%%%%%%%%%%%%%%%
+\newtheoremstyle{theoremStyle}% name of the style to be used
+  {\topsep}% measure of space to leave above the theorem. E.g.: 3pt
+  {\topsep}% measure of space to leave below the theorem. E.g.: 3pt
+  %%{\itshape}% name of font to use in the body of the theorem
+  {}
+	{0pt}% measure of space to indent
+  {\bfseries}% name of head font
+  {}% punctuation between head and body
+  { }% space after theorem head; " " = normal interword space
+  {\thmname{#1}\thmnumber{ #2}\thmnote{ (#3)}.}
+	%%theorem
+\theoremstyle{theoremStyle}
+\newtheorem{mythm}{Theorem}[section]
+
+\theoremstyle{theoremStyle}
+\newtheorem{mylem}{Lemma}[section]
+\theoremstyle{theoremStyle}
+\newtheorem{mycor}{Corollary}[section]
+\newtheorem{myprop}{Proposition}[section]
+
+\newtheoremstyle{defStyle}% name of the style to be used
+  {\topsep}% measure of space to leave above the theorem. E.g.: 3pt
+  {\topsep}% measure of space to leave below the theorem. E.g.: 3pt
+  {}% name of font to use in the body of the theorem
+  {0pt}% measure of space to indent
+  {\bfseries}% name of head font
+  {.}% punctuation between head and body
+  { }% space after theorem head; " " = normal interword space
+  {\thmname{#1}\thmnumber{ #2}\thmnote{ (#3)}}
+	%%theorem
+\theoremstyle{defStyle}
+\newtheorem{mydef}{Definition}[section]
+
+
+\newtheoremstyle{proofStyle}% name of the style to be used
+  {\topsep}% measure of space to leave above the theorem. E.g.: 3pt
+  {\topsep}% measure of space to leave below the theorem. E.g.: 3pt
+  {}% name of font to use in the body of the theorem
+  {0pt}% measure of space to indent
+  {\itshape}% name of head font
+  {.}% punctuation between head and body
+  { }% space after theorem head; " " = normal interword space
+  {\thmname{#1}}
+	%%theorem
+\newtheoremstyle{ExampleStyle}% name of the style to be used
+  {\topsep}% measure of space to leave above the theorem. E.g.: 3pt
+  {\topsep}% measure of space to leave below the theorem. E.g.: 3pt
+  {}% name of font to use in the body of the theorem
+  {0pt}% measure of space to indent
+  {\bfseries}% name of head font
+  {.}% punctuation between head and body
+  { }% space after theorem head; " " = normal interword space
+  {\thmname{#1}}
+	%%theorem
+
+%%%%%%%%%%%%%%%  Box texts %%%%%%%%%%%%%%%%%%%%
+%\definecolor{mycolor}{rgb}{0.122, 0.435, 0.698}% Rule colour
+%{
+%\makeatletter
+%\newcommand{\mybox}[1]{%
+  %\setbox0=\hbox{#1}%
+  %\setlength{\@tempdima}{\dimexpr\wd0+13pt}%
+  %\begin{tcolorbox}[colframe=mycolor,boxrule=0.5pt,arc=4pt,
+      %left=6pt,right=6pt,top=6pt,bottom=6pt,boxsep=0pt,width=\@tempdima]
+    %#1
+  %\end{tcolorbox}
+%
+%\makeatother
+%}
+
+%%%%%%%%%%%%%%%%  Environmnts %%%%%%%%%%%%%%%
+\theoremstyle{proofStyle}
+\newtheorem{myproof}{Proof}
+\theoremstyle{ExampleStyle}
+\newtheorem{myexample}{Examples}
+\theoremstyle{theoremStyle}
+\newtheorem{myexercise}{Excercise}[section]
+\theoremstyle{theoremStyle}
+\newtheorem{myquestion}{Question}
+\theoremstyle{proofStyle}
+\newtheorem{mysol}{Solution}
+\newtheorem{myremark}{Remark}
+
+
+%%%%%%%%%%%%%%%%%%%%  Macros  %%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\bp}{\begin{myprop}}
+\newcommand{\ep}{\end{myprop}}
+\newcommand{\bpr}{\begin{myproof}}
+\newcommand{\epr}{\end{myproof}}
+\newcommand{\bl}{\begin{mylem}}
+\newcommand{\el}{\end{mylem}}
+\newcommand{\bc}{\begin{mycor}}
+\newcommand{\ec}{\end{mycor}}
+\newcommand{\bt}{\begin{tcolorbox}[colback=green!5, colframe=green!30!brown]\begin{mythm}}
+\newcommand{\et}{\end{mythm}\end{tcolorbox}}
+\newcommand{\bd}{\begin{tcolorbox}[colback=blue!2, colframe=lightgray!50!purple]\begin{mydef}}
+\newcommand{\ed}{\end{mydef}\end{tcolorbox}}
+\newcommand{\bex}{\begin{myexample}}
+\newcommand{\eex}{\end{myexample}}
+\newcommand{\bx}{\begin{tcolorbox}[colback=orange!5, colframe=pink]\begin{myexample}}
+\newcommand{\ex}{\end{myexample}\end{tcolorbox}}
+\newcommand{\bxc}{\begin{myexercise}\mbox{}}
+\newcommand{\exc}{\end{myexercise}}
+\newcommand{\bs}{\begin{mysol}}
+\newcommand{\es}{\end{mysol}}
+\newcommand{\br}{\begin{myremark}}
+\newcommand{\er}{\end{myremark}}
+\newcommand{\bq}{\begin{myquestion}}
+\newcommand{\eq}{\end{myquestion}}
+
+\newcommand{\bpic}[2]{\begin{minipage}[t]{\linewidth}\adjustbox{valign=t}{\includegraphics[width= #1\textwidth]{#2}}\end{minipage}}
+
+
+\newcommand{\bn}{\begin{tcolorbox}[colback=blue!2, colframe=lightgray!50!purple]}
+\newcommand{\en}{\end{tcolorbox}}
+
+%%math operators
+\DeclareMathOperator{\Ima}{Im}
+%%\DeclareMathOperator{\max}{max}
+%%\DeclareMathOperator{\deg}{deg}
+\newcommand{\norm}[1]{\left\lVert #1\right\rVert}
+\newcommand{\tr}{\mbox{tr}}
+\newcommand{\inprod}[2]{\left\langle #1,#2\right\rangle}
+
+%% fonts %%%
+\newcommand{\cm}[1]{\CMcal{#1}}
+\newcommand{\scr}[1]{\mathscr{#1}}
+\newcommand{\bb}[1]{\mathbb{#1}}
+
+%% sets %%
+\newcommand{\R}{\bb R}
+\newcommand{\N}{\bb N}
+\newcommand{\Z}{\bb Z}
+\newcommand{\C}{\bb C}
+\newcommand{\seq}[2]{\left({#1}\right)_{#2 = 1}^\infty}
+\newcommand{\seqq}[3]{\left({#1}\right)_{#2}^{#3}}
+\newcommand{\sigA}{\sigma\mbox{-algebra}}
+
+%%vectors and matrices
+\renewcommand{\v}[1]{\boldsymbol{#1}}
+\newcommand{\m}[1]{\mathrm{#1}}
+\newcommand{\vt}[1]{\utilde{#1}}
+\renewcommand{\vec}[1]{\overset{\longrightarrow}{#1}}
+
+
+%%Prob and stats
+\newcommand{\Em}{\mathbb{E}}
+\newcommand{\Prob}{\mathbb{P}}
+\newcommand{\Var}{\mathbb{V}ar}
+\newcommand{\Cov}{\mathbb{C}ov}
+\newcommand{\muhat}{\hat{\mu}}
+\newcommand{\Ndist}{\CMcal{N}}
+
+%%operators
+\newcommand{\limitinf}[1]{\underset{#1\rightarrow\infty}{\lim\inf\,}}
+\newcommand{\Limitinf}[2]{\underset{#1=1}{\overset{\infty}{\bigcup}}\underset{#2=#1}{\overset{\infty}{\bigcap}}}
+\newcommand{\limitsup}[1]{\underset{#1\rightarrow\infty}{\lim\sup\,}}
+\newcommand{\Limitsup}[2]{\underset{#1=1}{\overset{\infty}{\bigcap}}\underset{#2=#1}{\overset{\infty}{\bigcup}}}
+\newcommand{\cupft}[3]{\underset{#1=#2}{\overset{#3}{\bigcup}}}
+\newcommand{\capft}[3]{\underset{#1=#2}{\overset{#3}{\bigcap}}}
+\newcommand{\capp}[2]{\underset{#1}{\overset{#2}{\bigcap}}}
+\newcommand{\cupp}[2]{\underset{#1}{\overset{#2}{\bigcup}}}
+\newcommand{\caps}[1]{\underset{#1}{\bigcap}}
+\newcommand{\cups}[1]{\underset{#1}{\bigcup}}
+\newcommand{\summ}[2]{\underset{#1}{\overset{#2}{\sum}}}
+\newcommand{\sums}[1]{\underset{#1}{\sum}}
+\newcommand{\limm}[2]{\underset{#1\rightarrow #2}{\lim}}
+\newcommand{\prodd}[2]{\underset{#1}{\overset{#2}{\prod}}}
+\newcommand{\prods}[1]{\underset{#1}{\prod}}
+
+\DeclareMathOperator{\re}{Re}
+\DeclareMathOperator{\im}{Im}
+\DeclareMathOperator{\Arg}{Arg}
+
+%%calculus
+\newcommand{\dd}{\mathrm{d}}
+\newcommand{\di}{\;\mathrm{d}}
+
+%%functions
+\newcommand{\ind}{\textbf{1}}
+
+%%teaching
+\newcommand{\dline}{
+
+\vspace{2mm}
+
+\dotfill}
